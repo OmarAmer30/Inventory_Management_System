@@ -1,14 +1,25 @@
-import path from "path";
-
 import fs from "fs";
 
-class fileHandler {
-  readProducts(file: any) {
-    let products;
+function readProducts(file: string) {
+  try {
     const data = fs.readFileSync(file, "utf8"); // 1
-    products = JSON.parse(data);
+    const products = JSON.parse(data);
     return products;
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to parse JSON from file: ${file}`);
   }
 }
 
-module.exports = fileHandler;
+function writeProducts(file: string, products: any[]) {
+  const data = JSON.stringify(products);
+  try {
+    fs.writeFileSync(file, data);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+exports.read = readProducts;
+exports.write = writeProducts;

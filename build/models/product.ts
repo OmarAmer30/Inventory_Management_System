@@ -1,3 +1,7 @@
+import path from "path";
+
+const dataFile = path.join(__dirname, "../../data/product.json");
+
 const fileHandler = require("../utils/fileHandler");
 
 class Product {
@@ -11,6 +15,11 @@ class Product {
     this.title = title;
     this.price = price;
     this.description = description;
+  }
+
+  static fetchProducts() {
+    const products = fileHandler.read(dataFile);
+    return products;
   }
 }
 module.exports = Product;

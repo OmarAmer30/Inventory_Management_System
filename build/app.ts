@@ -1,11 +1,11 @@
 import express from "express";
-import path from "path";
 
 let app = express();
 
 app.use(express.json());
 
-app.use(path.join(__dirname, "./controllers/product.ts"));
+const routes = require("./routes/product");
+app.use(routes);
 
 app.listen(3000, () => {
   console.log("Server Running");

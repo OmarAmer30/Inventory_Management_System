@@ -1,19 +1,21 @@
 import express from "express";
 
+const productControllers = require("../controllers/product");
+
 const route = express.Router();
 
-route.get('products');
+route.get("/products", productControllers.getProducts);
 
-route.get('products/:id');
+// route.get("products/:id");
 
-route.post('products');
+// route.post("products");
 
-route.put('products/:id');
+// route.put("products/:id");
 
-route.delete('products/:id');
+// route.delete("products/:id");
 
-route.post('products/:id/add');
+// route.post("products/:id/add");
 
-route.post('products/:id/sell');
+// route.post("products/:id/sell");
 
 module.exports = route;
