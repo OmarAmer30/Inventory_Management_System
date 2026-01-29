@@ -261,6 +261,8 @@ Every product must look like this:
 
   "price": 15,
 
+  "qty": 356,
+  
   "description": "1L whole milk"
 
 }

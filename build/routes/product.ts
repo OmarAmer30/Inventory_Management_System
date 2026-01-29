@@ -8,7 +8,7 @@ route.get("/products", productControllers.getProducts);
 
 // route.get("products/:id");
 
-// route.post("products");
+route.post("/products", productControllers.addProducts);
 
 // route.put("products/:id");
 
