@@ -2,7 +2,7 @@ import fs from "fs";
 
 function readProducts(file: string) {
   try {
-    const data = fs.readFileSync(file, "utf8"); // 1
+    const data = fs.readFileSync(file, "utf8");
     const products = JSON.parse(data);
     return products;
   } catch (error) {
@@ -12,7 +12,7 @@ function readProducts(file: string) {
 }
 
 function writeProducts(file: string, products: any[]) {
-  const data = JSON.stringify(products);
+  const data = JSON.stringify(products, null, 4);
   try {
     fs.writeFileSync(file, data);
   } catch (error) {

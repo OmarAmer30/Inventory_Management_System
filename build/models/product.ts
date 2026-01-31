@@ -5,40 +5,54 @@ const dataFile = path.join(__dirname, "../../data/product.json");
 const fileHandler = require("../utils/fileHandler");
 
 class Product {
+  static counter = 1;
   id: number;
   title: string;
   price: number;
   qty: number;
   description: string;
 
-  constructor(
-    id: number,
-    title: string,
-    price: number,
-    qty: number,
-    description: string,
-  ) {
-    this.id = id;
+  constructor(title: string, price: number, qty: number, description: string) {
+    this.id = Product.counter;
     this.title = title;
     this.price = price;
     this.qty = qty;
     this.description = description;
+    Product.counter++;
   }
 
-  static fetchProducts() {
+  static fetchProducts(id: number | null = null) {
     const products = fileHandler.read(dataFile);
-    return products;
+    if (id === null) return products;
+    const product = products.find((p: Product) => p.id == id);
+    console.log(product);
+    return product;
   }
 
   static addProducts(newProducts: Product[]) {
     try {
-      const products: Product[] = fileHandler.read(dataFile);
+      const products: Product[] = this.fetchProducts();
+      if (products.length > 0) {
+        const maxId = Math.max(...products.map((p: { id: number }) => p.id));
+        Product.counter = maxId + 1;
+      }
+      newProducts.forEach((p) => {
+        if (!p.id) {
+          p.id = Product.counter++;
+        }
+      });
       products.push(...newProducts);
       fileHandler.write(dataFile, products);
     } catch (err) {
       console.error("Failed to add products:", err);
       throw err;
     }
+  }
+
+  static deleteProduct(id: number) {
+    const products: Product[] = this.fetchProducts();
+    products.splice(products.findIndex((p) => p.id == id), 1);
+    fileHandler.write(dataFile, products);
   }
 }
 module.exports = Product;
