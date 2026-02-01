@@ -110,3 +110,20 @@ exports.addQuantity = async (
     res.status(500).json({ error: "Failed to adding quantity" });
   }
 };
+exports.updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = req.params.id;
+    const updatedData = {
+      title: req.body.title,
+      price: req.body.price,
+      qty: req.body.qty,
+      description: req.body.description,
+    };
+
+    const updatedProduct = await Products.updateProduct(id, updatedData);
+    return res.status(200).json({ updatedProduct });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Failed to update product" });
+  }
+};

@@ -10,7 +10,7 @@ route.get("/products/:id", productControllers.getProductById);
 
 route.post("/products", productControllers.addProducts);
 
-// route.put("products/:id");
+route.put("/products/:id", productControllers.updateProduct);
 
 route.delete("/products/:id", productControllers.deleteProduct);
 

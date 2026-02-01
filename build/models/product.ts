@@ -25,7 +25,7 @@ class Product {
     const products = fileHandler.read(dataFile);
     if (id === null) return products;
     const product = products.find((p: Product) => p.id == id);
-    console.log(product);
+
     return product;
   }
 
@@ -51,10 +51,11 @@ class Product {
 
   static deleteProduct(id: number) {
     const products: Product[] = this.fetchProducts();
-    products.splice(
-      products.findIndex((p) => p.id == id),
-      1,
-    );
+    const index = products.findIndex((p: Product) => p.id === id);
+
+    if (index === -1) throw new Error("Product id is wrong or not exist");
+
+    products.splice(index, 1);
     fileHandler.write(dataFile, products);
   }
 
@@ -63,13 +64,34 @@ class Product {
       const products: Product[] = this.fetchProducts();
       const index = products.findIndex((p: Product) => p.id == id);
 
-      if (index === -1)
-        throw new Error("Product id is wrong or not exist");
+      if (index === -1) throw new Error("Product id is wrong or not exist");
 
       products[index].qty += quantity;
-      fileHandler.write(dataFile, products)
+      fileHandler.write(dataFile, products);
     } catch (err) {
       console.error("Failed to add quantity", err);
+      throw err;
+    }
+  }
+
+  static updateProduct(id: number, updatedProduct: Product) {
+    try {
+      const products: Product[] = this.fetchProducts();
+      const index = products.findIndex((p: Product) => p.id == id);
+
+      if (index === -1) throw new Error("Product id is wrong or not exist");
+
+      products[index].price = updatedProduct.price ?? products[index].price;
+      products[index].qty = updatedProduct.qty ?? products[index].qty;
+      products[index].qty = updatedProduct.qty || products[index].qty;
+      products[index].description =
+        updatedProduct.description || products[index].description;
+
+      fileHandler.write(dataFile, products);
+      return products[index];
+    } catch (err) {
+      console.error("Failed to update product:", err);
+      console.log(err);
       throw err;
     }
   }
