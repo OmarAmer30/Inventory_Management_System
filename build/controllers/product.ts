@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 
 const Products = require("../models/product");
 
@@ -26,7 +26,9 @@ exports.getProductById = async (
     const productId = req.params.id;
     console.log(productId);
     const product = await Products.fetchProducts(productId);
-    if (product === undefined) throw new Error("Id is Null");
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
     res.status(200).json({ product });
   } catch (err) {
     console.log("Error fetching product:", err);
@@ -78,12 +80,33 @@ exports.deleteProduct = async (
     const products = await Products.fetchProducts();
     const index = products.findIndex((p: any) => p.id == id);
 
-    if (index == undefined) throw new Error("Id is undefined");
+    if (index === -1) {
+      return res.status(404).json({ error: "Product not found" });
+    }
 
     await Products.deleteProduct(id);
     res.status(200).json({ msg: `Product with id: ${id} deleted` });
   } catch (err) {
     console.log("Error deleting product:", err);
     res.status(500).json({ error: "Failed to delete product" });
+  }
+};
+
+exports.addQuantity = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const id = req.params.id;
+    const qty = req.body.qty || 1;
+
+    await Products.addQuantity(id, qty);
+    res
+      .status(200)
+      .json({ msg: `Product with id: ${id} has increased it's quantity` });
+  } catch (err) {
+    console.log("Error adding quantity:", err);
+    res.status(500).json({ error: "Failed to adding quantity" });
   }
 };

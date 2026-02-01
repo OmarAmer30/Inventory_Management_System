@@ -51,8 +51,27 @@ class Product {
 
   static deleteProduct(id: number) {
     const products: Product[] = this.fetchProducts();
-    products.splice(products.findIndex((p) => p.id == id), 1);
+    products.splice(
+      products.findIndex((p) => p.id == id),
+      1,
+    );
     fileHandler.write(dataFile, products);
+  }
+
+  static addQuantity(id: number, quantity: number) {
+    try {
+      const products: Product[] = this.fetchProducts();
+      const index = products.findIndex((p: Product) => p.id == id);
+
+      if (index === -1)
+        throw new Error("Product id is wrong or not exist");
+
+      products[index].qty += quantity;
+      fileHandler.write(dataFile, products)
+    } catch (err) {
+      console.error("Failed to add quantity", err);
+      throw err;
+    }
   }
 }
 module.exports = Product;

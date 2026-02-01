@@ -14,7 +14,7 @@ route.post("/products", productControllers.addProducts);
 
 route.delete("/products/:id", productControllers.deleteProduct);
 
-// route.post("products/:id/add");
+route.post("/products/:id/add/", productControllers.addQuantity);
 
 // route.post("products/:id/sell");
 
