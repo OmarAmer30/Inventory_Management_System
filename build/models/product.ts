@@ -21,17 +21,17 @@ class Product {
     Product.counter++;
   }
 
-  static fetchProducts(id: number | null = null) {
-    const products = fileHandler.read(dataFile);
+  static async fetchProducts(id: number | null = null) {
+    const products = await fileHandler.read(dataFile);
     if (id === null) return products;
     const product = products.find((p: Product) => p.id == id);
 
     return product;
   }
 
-  static addProducts(newProducts: Product[]) {
+  static async addProducts(newProducts: Product[]) {
     try {
-      const products: Product[] = this.fetchProducts();
+      const products: Product[] = await this.fetchProducts();
       if (products.length > 0) {
         const maxId = Math.max(...products.map((p: { id: number }) => p.id));
         Product.counter = maxId + 1;
@@ -42,41 +42,41 @@ class Product {
         }
       });
       products.push(...newProducts);
-      fileHandler.write(dataFile, products);
+      await fileHandler.write(dataFile, products);
     } catch (err) {
       console.error("Failed to add products:", err);
       throw err;
     }
   }
 
-  static deleteProduct(id: number) {
-    const products: Product[] = this.fetchProducts();
+  static async deleteProduct(id: number) {
+    const products: Product[] = await this.fetchProducts();
     const index = products.findIndex((p: Product) => p.id === id);
 
     if (index === -1) throw new Error("Product id is wrong or not exist");
 
     products.splice(index, 1);
-    fileHandler.write(dataFile, products);
+    await fileHandler.write(dataFile, products);
   }
 
-  static addQuantity(id: number, quantity: number) {
+  static async addQuantity(id: number, quantity: number) {
     try {
-      const products: Product[] = this.fetchProducts();
+      const products: Product[] = await this.fetchProducts();
       const index = products.findIndex((p: Product) => p.id == id);
 
       if (index === -1) throw new Error("Product id is wrong or not exist");
 
       products[index].qty += quantity;
-      fileHandler.write(dataFile, products);
+      await fileHandler.write(dataFile, products);
     } catch (err) {
       console.error("Failed to add quantity", err);
       throw err;
     }
   }
 
-  static updateProduct(id: number, updatedProduct: Product) {
+  static async updateProduct(id: number, updatedProduct: Product) {
     try {
-      const products: Product[] = this.fetchProducts();
+      const products: Product[] = await this.fetchProducts();
       const index = products.findIndex((p: Product) => p.id == id);
 
       if (index === -1) throw new Error("Product id is wrong or not exist");
@@ -87,7 +87,7 @@ class Product {
       products[index].description =
         updatedProduct.description || products[index].description;
 
-      fileHandler.write(dataFile, products);
+      await fileHandler.write(dataFile, products);
       return products[index];
     } catch (err) {
       console.error("Failed to update product:", err);

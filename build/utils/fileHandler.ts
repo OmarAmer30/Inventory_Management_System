@@ -1,8 +1,8 @@
-import fs from "fs";
+import fs from "fs/promises";
 
-function readProducts(file: string) {
+async function readProducts(file: string) {
   try {
-    const data = fs.readFileSync(file, "utf8");
+    const data = await fs.readFile(file, "utf8");
     const products = JSON.parse(data);
     return products;
   } catch (error) {
@@ -11,10 +11,10 @@ function readProducts(file: string) {
   }
 }
 
-function writeProducts(file: string, products: any[]) {
+async function writeProducts(file: string, products: any[]) {
   const data = JSON.stringify(products, null, 4);
   try {
-    fs.writeFileSync(file, data);
+    await fs.writeFile(file, data);
   } catch (error) {
     console.log(error);
     throw error;
