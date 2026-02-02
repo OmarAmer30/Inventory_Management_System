@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, response } from "express";
 
 const Products = require("../models/product");
+const Sell = require("../models/sales");
 
 exports.getProducts = async (
   req: Request,
@@ -110,7 +111,11 @@ exports.addQuantity = async (
     res.status(500).json({ error: "Failed to adding quantity" });
   }
 };
-exports.updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+exports.updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const id = req.params.id;
     const updatedData = {
@@ -125,5 +130,38 @@ exports.updateProduct = async (req: Request, res: Response, next: NextFunction) 
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Failed to update product" });
+  }
+};
+
+exports.sellProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const productId = parseInt(req.params.id);
+    let quantity = req.body.qty;
+
+    if (quantity === undefined) quantity = 1;
+    
+    const product = await Products.fetchProducts(productId);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    if (quantity < 1)
+      return res.status(404).json({ error: "Invalid quantity" });
+
+    if (product.qty < quantity)
+      return res
+        .status(404)
+        .json({ error: "Not enough quantity in the inventory" });
+
+    await Products.updateProduct(productId, { qty: product.qty - quantity });
+    await Sell.sellProduct(productId, quantity, product.price);
+    return res.status(200).json({ msg: "Successful sell product" });
+  } catch (err) {
+    console.error("Error selling product:", err);
+    res.status(500).json({ error: "Failed to sell product" });
   }
 };

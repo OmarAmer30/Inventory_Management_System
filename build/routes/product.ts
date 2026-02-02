@@ -16,6 +16,6 @@ route.delete("/products/:id", productControllers.deleteProduct);
 
 route.post("/products/:id/add/", productControllers.addQuantity);
 
-// route.post("products/:id/sell");
+route.post("/products/:id/sell", productControllers.sellProduct);
 
 module.exports = route;

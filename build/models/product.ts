@@ -50,13 +50,18 @@ class Product {
   }
 
   static async deleteProduct(id: number) {
-    const products: Product[] = await this.fetchProducts();
-    const index = products.findIndex((p: Product) => p.id === id);
+    try {
+      const products: Product[] = await this.fetchProducts();
+      const index = products.findIndex((p: Product) => p.id === id);
 
-    if (index === -1) throw new Error("Product id is wrong or not exist");
+      if (index === -1) throw new Error("Product id is wrong or not exist");
 
-    products.splice(index, 1);
-    await fileHandler.write(dataFile, products);
+      products.splice(index, 1);
+      await fileHandler.write(dataFile, products);
+    } catch (err) {
+      console.error("Failed to delete product:", err);
+      throw err;
+    }
   }
 
   static async addQuantity(id: number, quantity: number) {
@@ -83,7 +88,6 @@ class Product {
 
       products[index].price = updatedProduct.price ?? products[index].price;
       products[index].qty = updatedProduct.qty ?? products[index].qty;
-      products[index].qty = updatedProduct.qty || products[index].qty;
       products[index].description =
         updatedProduct.description || products[index].description;
 
@@ -91,7 +95,6 @@ class Product {
       return products[index];
     } catch (err) {
       console.error("Failed to update product:", err);
-      console.log(err);
       throw err;
     }
   }

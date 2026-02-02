@@ -1,18 +1,18 @@
 import fs from "fs/promises";
 
-async function readProducts(file: string) {
+async function readData(file: string) {
   try {
     const data = await fs.readFile(file, "utf8");
-    const products = JSON.parse(data);
-    return products;
+    const parsedData = JSON.parse(data);
+    return parsedData;
   } catch (error) {
     console.log(error);
     throw new Error(`Failed to parse JSON from file: ${file}`);
   }
 }
 
-async function writeProducts(file: string, products: any[]) {
-  const data = JSON.stringify(products, null, 4);
+async function writeData(file: string, parsedData: any[]) {
+  const data = JSON.stringify(parsedData, null, 4);
   try {
     await fs.writeFile(file, data);
   } catch (error) {
@@ -21,5 +21,5 @@ async function writeProducts(file: string, products: any[]) {
   }
 }
 
-exports.read = readProducts;
-exports.write = writeProducts;
+exports.read = readData;
+exports.write = writeData;

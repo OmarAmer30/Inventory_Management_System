@@ -2,13 +2,13 @@
     {
         "title": "Milk",
         "price": 15,
-        "qty": 356,
+        "qty": 349,
         "id": 1
     },
     {
         "title": "Chocolate Bar",
         "price": 80,
-        "qty": 149,
+        "qty": 123,
         "description": "Milk Chocolate Bar",
         "id": 2
     }
