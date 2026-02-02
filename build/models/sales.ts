@@ -4,7 +4,7 @@ const dataFile = path.join(__dirname, "../../data/sales.json");
 
 const fileHandler = require("../utils/fileHandler");
 
-class Sell {
+class Sale {
   static counter = 0;
   id: number;
   productId: number;
@@ -12,11 +12,11 @@ class Sell {
   price: number;
 
   constructor(productId: number, qty: number, price: number) {
-    this.id = Sell.counter;
+    this.id = Sale.counter;
     this.productId = productId;
     this.qty = qty;
     this.price = price * qty;
-    Sell.counter++;
+    Sale.counter++;
   }
 
   static async sellProduct(
@@ -25,13 +25,13 @@ class Sell {
     productPrice: number,
   ) {
     try {
-      const sales: Sell[] = await fileHandler.read(dataFile);
-      const newSale = new Sell(productId, qty, productPrice);
+      const sales: Sale[] = await fileHandler.read(dataFile);
+      const newSale = new Sale(productId, qty, productPrice);
 
       if (sales.length > 0) {
         const maxId = Math.max(...sales.map((p: { id: number }) => p.id));
-        Sell.counter = maxId + 1;
-        newSale.id = Sell.counter;
+        Sale.counter = maxId + 1;
+        newSale.id = Sale.counter;
       }
       sales.push(newSale);
       await fileHandler.write(dataFile, sales);
@@ -42,4 +42,4 @@ class Sell {
   }
 }
 
-module.exports = Sell;
+module.exports = Sale;

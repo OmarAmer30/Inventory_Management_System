@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, response } from "express";
 
 const Products = require("../models/product");
-const Sell = require("../models/sales");
+const Sale = require("../models/sales");
 
 exports.getProducts = async (
   req: Request,
@@ -158,7 +158,7 @@ exports.sellProduct = async (
         .json({ error: "Not enough quantity in the inventory" });
 
     await Products.updateProduct(productId, { qty: product.qty - quantity });
-    await Sell.sellProduct(productId, quantity, product.price);
+    await Sale.sellProduct(productId, quantity, product.price);
     return res.status(200).json({ msg: "Successful sell product" });
   } catch (err) {
     console.error("Error selling product:", err);
