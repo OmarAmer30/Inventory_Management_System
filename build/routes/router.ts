@@ -18,4 +18,8 @@ route.post("/products/:id/add/", productControllers.addQuantity);
 
 route.post("/products/:id/sell", productControllers.sellProduct);
 
+// route.get("/sales", )
+
+// route.get("/sales/product/:id", )
+
 module.exports = route;
