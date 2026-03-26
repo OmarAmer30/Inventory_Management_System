@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 const Products = require("../models/product");
 const Sale = require("../models/sales");

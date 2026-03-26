@@ -40,6 +40,20 @@ class Sale {
       throw err;
     }
   }
+
+  static async fetchSales(productId: number | null = null) {
+    try {
+      const sales: Sale[] = await fileHandler.read(dataFile);
+
+      if (productId == null) return sales;
+
+      const productSales = sales.filter((s) => productId == s.productId);
+      return productSales;
+    } catch (err) {
+      console.error("Failed to fetch sales:", err);
+      throw err;
+    }
+  }
 }
 
 module.exports = Sale;

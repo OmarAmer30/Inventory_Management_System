@@ -4,7 +4,7 @@ let app = express();
 
 app.use(express.json());
 
-const routes = require("./routes/product");
+const routes = require("./routes/router");
 app.use(routes);
 
 app.listen(3000, () => {

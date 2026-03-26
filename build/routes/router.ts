@@ -1,6 +1,7 @@
 import express from "express";
 
 const productControllers = require("../controllers/product");
+const salesControllers = require("../controllers/sales");
 
 const route = express.Router();
 
@@ -18,8 +19,8 @@ route.post("/products/:id/add/", productControllers.addQuantity);
 
 route.post("/products/:id/sell", productControllers.sellProduct);
 
-// route.get("/sales", )
+route.get("/sales", salesControllers.getSales);
 
-// route.get("/sales/product/:id", )
+route.get("/sales/product/:id", salesControllers.getSalesByProductId);
 
 module.exports = route;
